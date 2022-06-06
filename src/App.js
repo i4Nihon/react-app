@@ -1,23 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import Title from './components/Title'
 
 function App() {
+  const [showEvents, setShowEvents] = useState(true);
+  const [events, setEvents] = useState([
+    { title: "mario's birthday bash", id: 1 },
+    { title: "bowser's live stream", id: 2 },
+    { title: "race on moo moo farm", id: 3 },
+  ]);
+
+  console.log(showEvents);
+
+  const handleclick = (id) => {
+    setEvents((prevEvents) => {
+      return prevEvents.filter((event) => {
+        return id !== event.id;
+      });
+    });
+    console.log(id);
+  };
+
+  const subtitle = "All the latest events in mario kingdom"
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Title title="Events in Your Area" subtitle={subtitle}/>
+      <Title title="another title" subtitle="another subtitle "/>
+      {showEvents && (
+        <div>
+          <button
+            onClick={() => {
+              setShowEvents(false);
+            }}
+          >
+            hide events
+          </button>
+        </div>
+      )}
+      
+      {!showEvents && (
+        <div>
+          <button
+            onClick={() => {
+              setShowEvents(true);
+            }}
+          >
+            show events
+          </button>
+        </div>
+      )}
+
+      {showEvents &&
+        events.map((event, index) => (
+          <React.Fragment key={event.id}>
+            <h2>
+              {index} - {event.title}
+            </h2>
+            <button
+              onClick={() => {
+                handleclick(event.id);
+              }}
+            >
+              delete event
+            </button>
+          </React.Fragment>
+        ))}
     </div>
   );
 }
