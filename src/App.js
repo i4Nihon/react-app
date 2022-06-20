@@ -1,8 +1,12 @@
 import "./App.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import Title from './components/Title'
+import Modal from "./components/Modal";
+import Open from "./components/Open";
+import EventList from "./components/EventList";
 
 function App() {
+  const [showModal, setShowModal] = useState(true)
   const [showEvents, setShowEvents] = useState(true);
   const [events, setEvents] = useState([
     { title: "mario's birthday bash", id: 1 },
@@ -10,20 +14,29 @@ function App() {
     { title: "race on moo moo farm", id: 3 },
   ]);
 
-  console.log(showEvents);
+  console.log(showModal);
+  const handleClick = (id) => {
 
-  const handleclick = (id) => {
     setEvents((prevEvents) => {
       return prevEvents.filter((event) => {
         return id !== event.id;
       });
     });
-    console.log(id);
   };
+  const handleClose = () => {
 
+    setShowModal(false)
+  }
+  const handleOpen = () => {
+
+    setShowModal(true)
+  }
   const subtitle = "All the latest events in mario kingdom"
+
+
   return (
     <div className="App">
+
       <Title title="Events in Your Area" subtitle={subtitle}/>
       <Title title="another title" subtitle="another subtitle "/>
       {showEvents && (
@@ -37,7 +50,7 @@ function App() {
           </button>
         </div>
       )}
-      
+
       {!showEvents && (
         <div>
           <button
@@ -50,21 +63,20 @@ function App() {
         </div>
       )}
 
-      {showEvents &&
-        events.map((event, index) => (
-          <React.Fragment key={event.id}>
-            <h2>
-              {index} - {event.title}
-            </h2>
-            <button
-              onClick={() => {
-                handleclick(event.id);
-              }}
-            >
-              delete event
-            </button>
-          </React.Fragment>
-        ))}
+      { showEvents && <EventList events={events} handleClick={handleClick} /> }
+      
+      
+      {showModal && <Modal handleClose ={handleClose} isSalesModal={false}>
+        <h2>10% Off Cupon Code</h2>
+        <p>Use asdadaasdasjasjiasd</p>
+      </Modal>
+      }
+      
+      {!showModal && <Open handleOpen={handleOpen}>
+        <button onClick={handleOpen} className="Open">OPEN</button>
+      </Open>
+      }
+
     </div>
   );
 }
